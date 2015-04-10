@@ -8,11 +8,12 @@
         var directive = {
             restrict: 'A',
             require: 'ngModel',
-            scope:{
-                options = '&'
+            scope: {
+                options: '&'
             },
             link : link
         };
+        
         return directive;
         
         function link(scope, element, attrs, ngModelCtrl) {
@@ -29,11 +30,13 @@
                 scope.$apply(function(){
                     ngModelCtrl.$setViewValue(value);
                 });
-            }
+            };
             
             var _maxValidator = function (modelValue, viewValue) {
                 var value = modelValue || viewValue;
-                if (ngModelCtrl.$isEmpty(value) || ngModelCtrl.$isEmpty(scope.settings.maxDate)) return true;
+                if (ngModelCtrl.$isEmpty(value) || ngModelCtrl.$isEmpty(scope.settings.maxDate)) {
+                    return true;
+                } 
                 var dtMaxValue = $.datepicker._determineDate(scope.dpInstance, scope.settings.maxDate, new Date());
                 var dtValue = new Date(value);
                 return !angular.isDate(dtValue) || dtValue <= dtMaxValue;
@@ -48,13 +51,13 @@
                 }
                 catch (err) {}
                 return false;
-            }
+            };
 
             var _dateFormatter = function (value) {
                 //skip empty values
                 if (ngModelCtrl.$isEmpty(value)) return;
                 return $.datepicker.formatDate(scope.settings.dateFormat, new Date(value));
-            }
+            };
 
             if (!ngModelCtrl.$isEmpty(scope.settings.maxDate)) {
                 ngModelCtrl.$validators.maxDate = _maxValidator;
